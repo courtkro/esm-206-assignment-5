@@ -79,15 +79,12 @@ salamander_2017 <- salamander_data %>%
   summarize(total_count = sum(vert_index)) %>% 
   mutate(prop = total_count/sum(total_count))
 
-
-
-
-salamander_2017 %>%   
-kable(digits = 2,
-      Caption = "Table. 1",
-      col.names = c("Year", "Channel Type", "Count", "Proportion")) %>% 
+salamander_2017 %>% 
+  kable(digits = 2,
+        caption = "Table 1. Counts and Proportions of Salamanders observed at different channel types in Mack Creek for clear-cut and old-growth sections in 2017.",
+        col.names = c("Section", "Channel Type", "Count", "Proportion")) %>% 
   kable_styling(bootstrap_options = "bordered",
-                full_width = FALSE,
-                position = "left")
+                full_width = TRUE,
+                position = "center")
 ```
 
