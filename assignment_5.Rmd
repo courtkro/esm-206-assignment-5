@@ -1,0 +1,58 @@
+---
+title: "ESM 206 - Pacific Giant Salamanders"
+author: "Courtney Krone and Alex Ehrens"
+date: "11/25/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+```
+
+
+
+```{r}
+# Attach Packages
+library(tidyverse)
+library(tidyr)
+library(janitor)
+library(ggbeeswarm)
+```
+
+### 1. Introduction
+
+
+### 2. Data and Methods
+
+
+### 3. Results
+
+
+#### Results A
+
+```{r}
+# Read in data and tidy data
+pacific_salamander <- read_csv("mack_creek_vertebrates.csv") %>% 
+  clean_names() %>% 
+  filter(species == "DITE") %>% 
+  group_by(year, section) %>% 
+  summarize(total_count = sum(vert_index))
+
+pacific_salamander$section[pacific_salamander$section == "CC"] <- "Clear Cut"
+pacific_salamander$section[pacific_salamander$section == "OG"] <- "Old Growth"
+
+# Plot data
+ggplot(pacific_salamander, aes(x = year, y = total_count))+
+  geom_line(aes(color = section)) +
+  theme_bw()+
+  scale_x_continuous(limits = c(1993,2017), expand = c(0,0))+
+  scale_y_continuous(limits = c(0, 14000),
+                     expand = c(0,0))+
+  theme(legend.position = c(0.2, 0.8), 
+        legend.key = element_rect(fill = NA),
+        legend.key.height = unit(5, "mm"),
+        legend.key.width = unit(5, "mm"))
+ # I am trying to get the legend to be transparent but it's not working! 
+ 
+```
+
