@@ -48,15 +48,14 @@ salamander_data$unittype[salamander_data$unittype == "P"] <- "Pool"
 ```{r}
 # Read in data and tidy data
 pacific_salamander <- salamander_data %>% 
-  group_by(year, section) %>% 
-  summarize(total_count = sum(vert_index))
+  count(year, section)
 
 # Plot data
-ggplot(pacific_salamander, aes(x = year, y = total_count))+
+ggplot(pacific_salamander, aes(x = year, y = n))+
   geom_line(aes(color = section)) +
   theme_bw()+
   scale_x_continuous(limits = c(1993,2017), expand = c(0,0))+
-  scale_y_continuous(limits = c(0, 14000),
+  scale_y_continuous(limits = c(0, 400),
                      expand = c(0,0))+
   theme(legend.position = c(0.2, 0.8), 
         legend.background = element_rect(fill = "transparent"),
@@ -73,18 +72,39 @@ ggplot(pacific_salamander, aes(x = year, y = total_count))+
 #### Results B
 
 ```{r}
+# create table of salamnder counts in different unit types by section for 2017
 salamander_2017 <- salamander_data %>% 
-  filter(year == "2017", unittype %in% c("Cascade","Side-channel","Pool")) %>% 
-  group_by(section, unittype) %>% 
-  summarize(total_count = sum(vert_index)) %>% 
-  mutate(prop = total_count/sum(total_count))
+  filter(year == "2017", 
+         unittype %in% c("Cascade","Side-channel","Pool")) %>% 
+  count(section, unittype)
 
-salamander_2017 %>% 
+salamander_2017_table <- salamander_2017 %>% 
+  pivot_wider(names_from = unittype, values_from = n)
+
+#add proportions to table
+salamander_2017_props <- salamander_2017_table %>% 
+  adorn_percentages(denominator = "row") %>% 
+  adorn_pct_formatting(digits = 1) %>% 
+  adorn_ns(position = "front")
+
+salamander_2017_props %>% 
   kable(digits = 2,
-        caption = "Table 1. Counts and Proportions of Salamanders observed at different channel types in Mack Creek for clear-cut and old-growth sections in 2017.",
-        col.names = c("Section", "Channel Type", "Count", "Proportion")) %>% 
+        caption = "Table 1. Counts and Proportions of Salamanders observed at different channel types in Mack Creek for clear-cut and old-growth sections in 2017.") %>% 
   kable_styling(bootstrap_options = "bordered",
-                full_width = TRUE,
-                position = "center")
+                full_width = FALSE,
+                position = "left")
 ```
+
+#### Results C
+
+```{r}
+# perform chi square test of salamnder 2017 counts
+salamander_2017_chi_counts <- salamander_2017_table %>% 
+  select(-section)
+
+salamander_2017_chi <- chisq.test(salamander_2017_chi_counts)
+salamander_2017_chi
+
+```
+
 
