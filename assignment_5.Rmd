@@ -18,6 +18,8 @@ library(tidyr)
 library(janitor)
 library(ggbeeswarm)
 library(kableExtra)
+library(effsize)
+library(ggridges)
 ```
 
 ### 1. Introduction
@@ -107,4 +109,59 @@ salamander_2017_chi
 
 ```
 
+
+#### Results D
+
+```{r}
+# Perform 2 sample t tests for 2017 old growth and 2017 clear cut sections
+
+# Create Vectors
+clear_cut <- salamander_data %>% 
+  filter(year == "2017") %>% 
+  filter(section == "Clear Cut") %>% 
+  pull(weight)
+
+old_growth <- salamander_data %>% 
+  filter(year == "2017") %>% 
+  filter(section == "Old Growth") %>% 
+  pull(weight)
+
+# T test and cohen's d comparing clear cut and old growth sections in 2017
+salamander_section_ttest <- t.test(clear_cut, old_growth, na.rm = TRUE)
+
+salamander_section_ttest
+
+# Perform cohen's d test
+
+salamander_section_d <- cohen.d(clear_cut, old_growth, na.rm = TRUE)
+
+salamander_section_d
+
+```
+
+
+#### ResultS E
+
+```{r}
+# Visually compare salamander weights between the three channels
+
+salamander_weight <- salamander_data %>% 
+  filter(year == "2017") %>% 
+  filter(unittype %in% c("Cascade", "Side-channel", "Pool"))
+
+
+ggplot(data = salamander_weight, aes(x = weight)) +
+  geom_histogram(bins = 12, aes(fill = unittype)) +
+  facet_wrap(~unittype, scale = "free")+
+labs(y = "Weight (g)", 
+       x = "Channel Classification",
+       title = "Salamnder weight in 2017 per channel type") +
+  theme_bw()
+  
+```
+
+```{r}
+salamander_aov <- aov(weight~unittype, data = salamander_weight) 
+summary(salamander_aov)
+```
 
