@@ -31,7 +31,7 @@ The Pacific Giant Salamander (Dicamptodon tenebrosus) is one of Oregon's largest
 
 ### **2. Data and Methods**
 
-Data for Pacific Giant Salamander abundance, weight and location from 1993-2017 was collected by [Stanley V. Gregory](https://portal.edirepository.org/nis/mapbrowse?scope=knb-lter-and&identifier=4027&revision=12). Salamander counts were based on the number of observations made in each section every year. Each salamander captured was at Mack creek and was measured and weighed. Salamanders were observed in three different channel classifications “pool”, “cascade”, “side-channel” in two types of sections “clear cut” and “old growth”. Trends in salamander abundance and weight in different forest conditions were compared by two-sample t-tests ($\alpha$ = 0.05). Salamander weight in different channel locations were compared using one-way anova tests ($\alpha$ = 0.05). All analyses and figures were developed through R software version 1.2.1335.
+Data for Pacific Giant Salamander abundance, weight and location from 1993-2017 was collected by [Stanley V. Gregory](https://portal.edirepository.org/nis/mapbrowse?scope=knb-lter-and&identifier=4027&revision=12). Salamander counts (individuals) were based on the number of observations made in each section every year. Each salamander captured was at Mack creek and was measured and weighed. Salamanders were observed in three different channel classifications “pool”, “cascade”, “side-channel” in two types of sections “clear cut” and “old growth”. Trends in salamander abundance and weight in different forest conditions were compared by two-sample t-tests ($\alpha$ = 0.05). Salamander weight in different channel locations were compared using one-way anova tests ($\alpha$ = 0.05). All analyses and figures were developed through R software version 1.2.1335.
 
 ![**Figure 2.** H.J. Andrews Experimental Forest, Oregon, USA. Mack Creek. *Credit: Oregon State University*](mack_creek_map.png)
 
@@ -70,13 +70,17 @@ ggplot(pacific_salamander, aes(x = year, y = n))+
         legend.background = element_rect(fill = "transparent"),
         legend.key.height = unit(5, "mm"),
         legend.key.width = unit(5, "mm")) +
-  labs(title = "Pacific Salamander abundance by section of Mack Creek, Oregon (1993-2017)",
+  labs(title = "Pacific Salamander count by section in Mack Creek, Oregon (1993-2017)",
        x = "Year",
-       y = "Total Salamander Count")
+       y = "Total Salamander Count",
+       caption = "Figure 3. Salamander counts (individuals) in old growth (blue line) and clear cut (red line) sections of mack\n creek between 1993 and 2017.")+
+  theme(plot.title = element_text(face = "bold"),
+      plot.caption = element_text(face = "bold", hjust = 0))
 
-# Add figure caption
+
 ```
 
+Salamander counts were highest for both sections of the forest between 2003-2010. The old growth section of the forest typical had higher counts of salamanders than the clear cut sections except for the years 2015-2017.
 
 #### *Results B*
 
@@ -98,10 +102,13 @@ salamander_2017_props <- salamander_2017_table %>%
 
 salamander_2017_props %>% 
   kable(digits = 2,
-        caption = "Table 1. Counts and Proportions of Salamanders observed at different channel types in Mack Creek for clear-cut and old-growth sections in 2017.") %>% 
+        caption = "Table 1. Salamander counts observed at three channel types in Mack Creek for clear-cut and old-growth forest sections in 2017. Values indicated are counts, with propotions (by channel type). Data Source: Aquatic Vertebrate Population Study in Mack Creek (2017)") %>% 
+  
   kable_styling(bootstrap_options = "bordered",
                 full_width = FALSE,
-                position = "left")
+                position = "left") %>% 
+  add_header_above(c("", "Channel Type" = 3))
+# I want to bold the table caption but don't know how
 ```
 
 #### *Results C*
@@ -115,7 +122,7 @@ salamander_2017_chi <- chisq.test(salamander_2017_chi_counts)
 salamander_2017_chi
 
 ```
-
+There is not a significant association between forest condition (old growth or clear cut) and where salamanders are found in the creek channel. Counts and proportions (see Table 1.) differ between channel type and forest section significantly (X^2^(2) = `r round(salamander_2017_chi$statistic, 2)`, p-value = `r round(salamander_2017_chi$p.value, 2)`). Majority of salamanders are found in the "cascade" channel type regardless of whether it's located in a clear cut or old growth section of the forest. 
 
 #### *Results D*
 
@@ -145,7 +152,7 @@ salamander_section_d <- cohen.d(clear_cut, old_growth, na.rm = TRUE)
 salamander_section_d
 
 ```
-
+The difference in mean salamander weights between clear cut and old growth sections has a neglible effect size (cohen's d = `r round(salamander_section_d$estimate, 3)`). There is not a statiscal signficance (t(`r round(salamander_section_ttest$parameter, 2)` = `r round(salamander_section_ttest$statistic, 2)`, p = `r round(salamander_section_ttest$p.value, 2)`)) between the mean weights of salamanders located in clear cut and old growth forest sections.
 
 #### *Results E*
 
@@ -160,9 +167,12 @@ salamander_weight <- salamander_data %>%
 ggplot(data = salamander_weight, aes(x = weight)) +
   geom_histogram(bins = 12, aes(fill = unittype)) +
   facet_wrap(~unittype, scale = "free")+
+  scale_y_continuous(limits = c(0, 250),
+                     expand = c(0,0))+
 labs(y = "Weight (g)", 
-       x = "Channel Classification",
-       title = "Salamnder weight in 2017 per channel type") +
+       x = "Channel type",
+       title = "Salamnder weight in 2017 per channel type",
+     caption = "Figure 4. Salamander weight in three channel types of Mack creek. Salamander weight was measured in \nthree channel types:Cascade (red, n = 448), Pool (green, n = 76), Side-channel (blue, n = 164).") +
   theme_bw()
   
 ```
