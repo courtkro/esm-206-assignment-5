@@ -24,9 +24,14 @@ library(ggridges)
 
 ### 1. Introduction
 
+The Pacific Giant Salamander (Dicamptodon tenebrosus) is one of Oregon's largest native amphibians (Oregon Wild). They are typically the dominant vertebrate predator in high gradient streams and an indicator species of healthy waterways (Parker 1994).  This amphibian is dependent on clean aquatic habitats for survival; however, logging and other human activities can severely affect their stream habitats (Oregon Wild). This report will explore the weight and abundance of giant salamander populations in two sections (clear cut and old growth) of Mack Creek in the H.J. experimental Forest. This data was collected by Stanley Gregory from 1993 to 2017, which is one of the longest continuous records of salmonid populations (Gregory S.V. 2016). Here, we use the data to explore relationships between salamander weight and abundance in several sections and channels of the creek. 
+
+![**Figure 1.** Pacific Giant Salamander. *Credit:* Gary Nafis](pacific_giant_salamander.jpg)
+
 
 ### 2. Data and Methods
 
+Data for Pacific Giant Salamander abundance, weight and location from 1993-2017 was collected by [Stanley V. Gregory](https://portal.edirepository.org/nis/mapbrowse?scope=knb-lter-and&identifier=4027&revision=12).
 
 ### 3. Results
 
@@ -165,3 +170,13 @@ salamander_aov <- aov(weight~unittype, data = salamander_weight)
 summary(salamander_aov)
 ```
 
+
+
+
+#### References
+
+[1] Gregory S. V. 2016. Aquatic Vertebrate Population Study in Mack Creek, Andrews Experimental Forest, 1987 to present. Environmental Data Initiative. https://doi.org/10.6073/pasta/5de64af9c11579266ef20da2ff32f702. Dataset accessed 11/29/2019.
+ 
+[2] “Pacific Giant Salamander: Oregon Wild.” Pacific Giant Salamander | Oregon Wild, oregonwild.org/wildlife/pacific-giant-salamander.
+
+[3] Parker, Michael S. “Feeding Ecology of Stream-Dwelling Pacific Giant Salamander Larvae (Dicamptodon Tenebrosus).” Copeia, vol. 1994, no. 3, 1994, pp. 705–718. JSTOR, www.jstor.org/stable/1447187.
