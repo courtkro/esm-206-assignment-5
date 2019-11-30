@@ -1,5 +1,5 @@
 ---
-title: "ESM 206 - Pacific Giant Salamanders"
+title: "**ESM 206 - Pacific Giant Salamanders**"
 author: "Courtney Krone and Alex Ehrens"
 date: "11/25/2019"
 output: html_document
@@ -22,21 +22,23 @@ library(effsize)
 library(ggridges)
 ```
 
-### 1. Introduction
+### **1. Introduction**
 
 The Pacific Giant Salamander (Dicamptodon tenebrosus) is one of Oregon's largest native amphibians (Oregon Wild). They are typically the dominant vertebrate predator in high gradient streams and an indicator species of healthy waterways (Parker 1994).  This amphibian is dependent on clean aquatic habitats for survival; however, logging and other human activities can severely affect their stream habitats (Oregon Wild). This report will explore the weight and abundance of giant salamander populations in two sections (clear cut and old growth) of Mack Creek in the H.J. experimental Forest. This data was collected by Stanley Gregory from 1993 to 2017, which is one of the longest continuous records of salmonid populations (Gregory S.V. 2016). Here, we use the data to explore relationships between salamander weight and abundance in several sections and channels of the creek. 
 
-![**Figure 1.** Pacific Giant Salamander. *Credit:* Gary Nafis](pacific_giant_salamander.jpg)
+![**Figure 1.** Pacific Giant Salamander. *Credit: Gary Nafis*](pacific_giant_salamander.jpg)
 
 
-### 2. Data and Methods
+### **2. Data and Methods**
 
-Data for Pacific Giant Salamander abundance, weight and location from 1993-2017 was collected by [Stanley V. Gregory](https://portal.edirepository.org/nis/mapbrowse?scope=knb-lter-and&identifier=4027&revision=12).
+Data for Pacific Giant Salamander abundance, weight and location from 1993-2017 was collected by [Stanley V. Gregory](https://portal.edirepository.org/nis/mapbrowse?scope=knb-lter-and&identifier=4027&revision=12). Salamander counts were based on the number of observations made in each section every year. Each salamander captured was at Mack creek and was measured and weighed. Salamanders were observed in three different channel classifications “pool”, “cascade”, “side-channel” in two types of sections “clear cut” and “old growth”. Trends in salamander abundance and weight in different forest conditions were compared by two-sample t-tests ($\alpha$ = 0.05). Salamander weight in different channel locations were compared using one-way anova tests ($\alpha$ = 0.05). All analyses and figures were developed through R software version 1.2.1335.
 
-### 3. Results
+![**Figure 2.** H.J. Andrews Experimental Forest, Oregon, USA. Mack Creek. *Credit: Oregon State University*](mack_creek_map.png)
+
+### **3. Results**
 
 
-#### Results A
+#### *Results A*
 ```{r}
 salamander_data <- read_csv("mack_creek_vertebrates.csv") %>% 
   clean_names() %>% 
@@ -76,7 +78,7 @@ ggplot(pacific_salamander, aes(x = year, y = n))+
 ```
 
 
-#### Results B
+#### *Results B*
 
 ```{r}
 # create table of salamnder counts in different unit types by section for 2017
@@ -102,7 +104,7 @@ salamander_2017_props %>%
                 position = "left")
 ```
 
-#### Results C
+#### *Results C*
 
 ```{r}
 # perform chi square test of salamnder 2017 counts
@@ -115,7 +117,7 @@ salamander_2017_chi
 ```
 
 
-#### Results D
+#### *Results D*
 
 ```{r}
 # Perform 2 sample t tests for 2017 old growth and 2017 clear cut sections
@@ -145,7 +147,7 @@ salamander_section_d
 ```
 
 
-#### ResultS E
+#### *Results E*
 
 ```{r}
 # Visually compare salamander weights between the three channels
@@ -173,7 +175,7 @@ summary(salamander_aov)
 
 
 
-#### References
+#### **References**
 
 [1] Gregory S. V. 2016. Aquatic Vertebrate Population Study in Mack Creek, Andrews Experimental Forest, 1987 to present. Environmental Data Initiative. https://doi.org/10.6073/pasta/5de64af9c11579266ef20da2ff32f702. Dataset accessed 11/29/2019.
  
