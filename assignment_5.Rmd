@@ -19,30 +19,39 @@ library(janitor)
 library(ggbeeswarm)
 library(kableExtra)
 library(effsize)
+library(car)
 library(ggridges)
 ```
 
 ### **1. Introduction**
 
+<<<<<<< HEAD
 The Pacific Giant Salamander (Dicamptodon tenebrosus) is one of Oregon's largest native amphibians (Oregon Wild). They are typically the dominant vertebrate predator in high gradient streams and an indicator species of healthy waterways (Parker 1994).  This amphibian is dependent on clean aquatic habitats for survival; however, logging and other human activities can severely affect their stream habitats (Oregon Wild). This report will explore the weight and abundance of giant salamander populations in two forest sections (clear cut and old growth) of Mack Creek in the H.J. Andrews Experimental Forest. This data was collected by Stanley Gregory from 1993 to 2017, which is one of the longest continuous records of salmonid populations (Gregory S.V. 2016). Here, we use the data to explore relationships between salamander weight and abundance in several sections and channels of the creek. 
+=======
+The Pacific Giant Salamander (Dicamptodon tenebrosus) is one of Oregon's largest native amphibians (Oregon Wild). They are typically the dominant vertebrate predator in high gradient streams and an indicator species of healthy waterways (Parker 1994). This amphibian is dependent on clean aquatic habitats for survival; however, logging and other human activities can severely affect their stream habitats (Oregon Wild). This report will explore the weight and abundance of giant salamander populations in two sections (clear cut and old growth) of Mack Creek in the H.J. experimental Forest. This data was collected by Stanley Gregory from 1993 to 2017, which is one of the longest continuous records of salmonid populations (Gregory S.V. 2016). Here, we use the data to explore relationships between salamander weight and abundance in several sections and channels of the creek. 
+>>>>>>> c1f0ab08c71ef2d8a111f0f22c92b2b960bed70e
 
 ![**Figure 1.** Pacific Giant Salamander. *Credit: Gary Nafis*](pacific_giant_salamander.jpg)
 
 
 ### **2. Data and Methods**
 
+<<<<<<< HEAD
 Data for Pacific Giant Salamander abundance, weight and location from 1993-2017 was collected by [Stanley V. Gregory](https://portal.edirepository.org/nis/mapbrowse?scope=knb-lter-and&identifier=4027&revision=12). Salamander counts (individuals) were based on the number of observations made in each forest section every year. Each salamander captured at Mack creek and was measured and weighed. Salamanders were observed in three different channel types “pool”, “cascade”, “side-channel” in two types of sections “clear cut” and “old growth”. Trends in salamander abundance and weight in different forest conditions were compared by two-sample t-tests ($\alpha$ = 0.05). Salamander weight in different channel locations were compared using one-way anova tests ($\alpha$ = 0.05). All analyses and figures were developed through R software version 1.2.1335.
+=======
+Data for Pacific Giant Salamander abundance, weight, and location from 1993-2017 was collected by [Stanley V. Gregory](https://portal.edirepository.org/nis/mapbrowse?scope=knb-lter-and&identifier=4027&revision=12). Salamander counts (individuals) were based on the number of observations made in each section every year. Each salamander captured at Mack Creek was measured and weighed. Salamanders were observed in three different channel classifications: “pool”, “cascade”, and “side-channel”, and in two types of forest sections: “clear cut” and “old growth”. Trends in salamander abundance and weight in different forest conditions were compared by two-sample t-tests ($\alpha$ = 0.05). Salamander weight in different channel locations were compared using one-way ANOVA tests ($\alpha$ = 0.05). All analyses and figures were developed through R software version 1.2.1335.
+>>>>>>> c1f0ab08c71ef2d8a111f0f22c92b2b960bed70e
 
 ![**Figure 2.** H.J. Andrews Experimental Forest, Oregon, USA. Mack Creek. *Credit: Oregon State University*](mack_creek_map.png)
 
 ### **3. Results**
 
 
-#### *Results A*
+#### *Results A - Pacific Salamander Abundances*
 ```{r}
 salamander_data <- read_csv("mack_creek_vertebrates.csv") %>% 
   clean_names() %>% 
-   filter(species == "DITE") 
+  filter(species == "DITE") 
 
 salamander_data$section[salamander_data$section == "CC"] <- "Clear Cut"
 salamander_data$section[salamander_data$section == "OG"] <- "Old Growth"
@@ -57,11 +66,12 @@ salamander_data$unittype[salamander_data$unittype == "P"] <- "Pool"
 ```{r}
 # Read in data and tidy data
 pacific_salamander <- salamander_data %>% 
-  count(year, section)
+  count(year, section) %>% 
+  mutate(Section = section)
 
 # Plot data
 ggplot(pacific_salamander, aes(x = year, y = n))+
-  geom_line(aes(color = section)) +
+  geom_line(aes(color = Section)) +
   theme_bw()+
   scale_x_continuous(limits = c(1993,2017), expand = c(0,0))+
   scale_y_continuous(limits = c(0, 400),
@@ -77,10 +87,9 @@ ggplot(pacific_salamander, aes(x = year, y = n))+
   theme(plot.title = element_text(face = "bold"),
       plot.caption = element_text(face = "bold", hjust = 0))
 
-
 ```
 
-Salamander counts were highest for both sections of the forest between 2003-2010. The old growth section of the forest typical had higher counts of salamanders than the clear cut sections except for the years 2015-2017.
+Salamander counts were highest for both sections of the forest between 2003-2010. The old growth section of the forest typically had higher counts of salamanders than the clear cut sections except for the years 2015-2017. However, it appears from Figure 3 that general trends in salamander abundance are similar in both sections of forest from 1993 to 2017.
 
 #### *Results B*
 
@@ -88,8 +97,9 @@ Salamander counts were highest for both sections of the forest between 2003-2010
 # create table of salamnder counts in different unit types by section for 2017
 salamander_2017 <- salamander_data %>% 
   filter(year == "2017", 
-         unittype %in% c("Cascade","Side-channel","Pool")) %>% 
-  count(section, unittype)
+         unittype %in% c("Cascade","Side-channel","Pool")) %>%
+  mutate(Section = section) %>% 
+  count(Section, unittype)
 
 salamander_2017_table <- salamander_2017 %>% 
   pivot_wider(names_from = unittype, values_from = n)
@@ -116,18 +126,42 @@ salamander_2017_props %>%
 ```{r}
 # perform chi square test of salamnder 2017 counts
 salamander_2017_chi_counts <- salamander_2017_table %>% 
-  select(-section)
+  select(-Section)
 
 salamander_2017_chi <- chisq.test(salamander_2017_chi_counts)
 salamander_2017_chi
 
 ```
-There is not a significant association between forest condition (old growth or clear cut) and where salamanders are found in the creek channel. Counts and proportions (see Table 1.) differ between channel type and forest section significantly (X^2^(2) = `r round(salamander_2017_chi$statistic, 2)`, p-value = `r round(salamander_2017_chi$p.value, 2)`). Majority of salamanders are found in the "cascade" channel type regardless of whether it's located in a clear cut or old growth section of the forest. 
+
+There is not a significant association between forest condition (old growth or clear cut) and where salamanders are found in the creek channel. Counts and proportions (see Table 1) differ between channel type and forest section significantly ($\chi$^2^(2) = `r round(salamander_2017_chi$statistic, 2)`, *p* = `r round(salamander_2017_chi$p.value, 2)`). Majority of salamanders are found in the "cascade" channel type regardless of whether it's located in a clear cut or old growth section of the forest. 
 
 #### *Results D*
 
 ```{r}
 # Perform 2 sample t tests for 2017 old growth and 2017 clear cut sections
+
+salamander_compare <- salamander_data %>% 
+  filter(year == "2017") %>% 
+  select(year, section, weight)
+
+salamander_summary <- salamander_compare %>% 
+  group_by(section) %>% 
+  summarize(
+    mean_weight = mean(weight, na.rm = TRUE),
+    sd_weight = sd(weight, na.rm = TRUE),
+    count = n()) 
+
+# summary table of salamander weight statistics 
+salamander_summary %>% 
+  kable(digits = 2,
+        caption = "Table 2. Summary statistics (mean, standard deviation, and number of counts) of Pacific salamander weights distributions in Mack Creek in 2017",
+        col.names = c("Forest Section",
+                      "Mean Weight (g)",
+                      "Standard Deviation (g)",
+                      "Count")) %>% 
+  kable_styling(bootstrap_options = "bordered",
+                full_width = FALSE,
+                position = "left")
 
 # Create Vectors
 clear_cut <- salamander_data %>% 
@@ -152,7 +186,7 @@ salamander_section_d <- cohen.d(clear_cut, old_growth, na.rm = TRUE)
 salamander_section_d
 
 ```
-The difference in mean salamander weights between clear cut and old growth sections has a neglible effect size (cohen's d = `r round(salamander_section_d$estimate, 3)`). There is not a statiscal signficance (t(`r round(salamander_section_ttest$parameter, 2)` = `r round(salamander_section_ttest$statistic, 2)`, p = `r round(salamander_section_ttest$p.value, 2)`)) between the mean weights of salamanders located in clear cut and old growth forest sections.
+The mean salamander weights in clear cut (`r round(salamander_section_ttest$estimate[1], 2)` g) and old growth (`r round(salamander_section_ttest$estimate[2], 2)` g) are similar to each other, with only a difference of 1.2 g between them. Statistical analysis confirms that there is no significant difference (t(`r round(salamander_section_ttest$parameter, 2)`) = `r round(salamander_section_ttest$statistic, 2)`, *p* = `r round(salamander_section_ttest$p.value, 2)`)) between the mean weights of salamanders located in clear cut and old growth forest sections. A neglible effect size (Cohen's d = `r round(salamander_section_d$estimate, 3)`) means that there is virtually no discernible difference in mean weights between the two forest sections of Mack Creek. 
 
 #### *Results E*
 
@@ -163,29 +197,97 @@ salamander_weight <- salamander_data %>%
   filter(year == "2017") %>% 
   filter(unittype %in% c("Cascade", "Side-channel", "Pool"))
 
+sal_weight_summary <- salamander_weight %>% 
+  group_by(unittype) %>% 
+  summarize(
+    mean_sal_weight = mean(weight, na.rm = TRUE),
+    sd_sal_weight = sd(weight, na.rm = TRUE),
+    sample_size = n(),
+    se_sal_weight = sd(weight, na.rm = TRUE) / sqrt(n()),
+    var_sal_weight = var(weight, na.rm = TRUE))
 
-ggplot(data = salamander_weight, aes(x = weight)) +
-  geom_histogram(bins = 12, aes(fill = unittype)) +
-  facet_wrap(~unittype, scale = "free")+
-  scale_y_continuous(limits = c(0, 250),
-                     expand = c(0,0))+
-labs(y = "Weight (g)", 
-       x = "Channel type",
-       title = "Salamnder weight in 2017 per channel type",
-     caption = "Figure 4. Salamander weight in three channel types of Mack creek. Salamander weight was measured in \nthree channel types:Cascade (red, n = 448), Pool (green, n = 76), Side-channel (blue, n = 164).") +
-  theme_bw()
-  
+# summary table of salamander weight statistics for each unit type
+sal_weight_summary %>% 
+  kable(digits = 2,
+        caption = "Table 3. Summary statistics (mean, standard deviation, number of counts, standard error, and variance) of Pacific salamander weights by channel classification in Mack Creek in 2017",
+        col.names = c("Channel Classification",
+                      "Mean Weight (g)",
+                      "Standard Deviation (g)",
+                      "Count",
+                      "Standard Error (g)",
+                      "Variance")) %>%
+          kable_styling(bootstrap_options = "bordered",
+                        full_width = TRUE,
+                        position = "left")
+
+# Levene's test for equal variances
+leveneTest(weight ~ unittype, data = salamander_weight)
+leveneTest
+
+# Cohen's d
+cascade <- salamander_weight %>% 
+  filter(unittype == "Cascade") %>% 
+  pull(weight)
+
+pool <- salamander_weight %>% 
+  filter(unittype == "Pool") %>% 
+  pull(weight)
+
+side_channel <- salamander_weight %>% 
+  filter(unittype == "Side-channel") %>% 
+  pull(weight)
+
+salamander_type_d <- cohen.d(cascade, pool, side_channel, na.rm = TRUE)
+salamander_type_d
+
+ggplot() +
+  geom_beeswarm(data = salamander_weight,
+       aes(x = unittype, y = weight,
+           color = unittype,
+           fill = unittype),
+       size = 1,
+       alpha = 0.8,
+       show.legend = FALSE) +
+  geom_point(data = sal_weight_summary, 
+             aes(x = unittype, 
+                 y = mean_sal_weight)) +
+  geom_errorbar(data = sal_weight_summary,
+                aes(x = unittype,
+                    ymin = mean_sal_weight - sd_sal_weight,
+                    ymax = mean_sal_weight + sd_sal_weight),
+                color = "black",
+                size = 0.5,
+                width = 0.1) +
+  theme_bw() +
+  labs(x = "Channel type",
+       y = "Weight (g)",
+       title = "Salamander weight by channel classification in Mack Creek, OR (2017)",
+       caption = "Figure 4. Salamander weight in three channel types of Mack Creek. Salamander weight was measured in \nthree channel types: Cascade (red, n = 448), Pool (green, n = 76), and Side-channel (blue, n = 164)") +
+  theme(plot.title = element_text(face = "bold"),
+      plot.caption = element_text(face = "bold", hjust = 0))
+
 ```
 
 ```{r}
 salamander_aov <- aov(weight~unittype, data = salamander_weight) 
 summary(salamander_aov)
+aov_outputs <- unlist(summary(salamander_aov))
 ```
 
+The mean salamander weights in each channel type (Cascade, Pool, and Side-channel) of Mack Creek are summarized in Table 3. Salamanders found in pools had the highest mean weight (`r round(sal_weight_summary$mean_sal_weight[2], 2)` g, n = `r sal_weight_summary$sample_size[2]`), compared to those found in cascades (`r round(sal_weight_summary$mean_sal_weight[1], 2)` g, n = `r sal_weight_summary$sample_size[1]`), and side-channels (`r round(sal_weight_summary$mean_sal_weight[3], 2)` g, n = `r sal_weight_summary$sample_size[3]`), which had the lowest mean weight. The one-way ANOVA test determined that there is a significant difference between at least two of the three channel type mean weights (F(`r aov_outputs[1]`, `r aov_outputs[2]`) = `r round(aov_outputs[7], 2)`, *p* = `r round(aov_outputs[9], 2)`). It is unknown which two of the three channel types have stastically different means, so further analysis with a post-hoc pairwise test like Tukey's Honestly Significant Differences will be needed. 
 
+In addition, Figure 4 shows that for each of the channel types there are outliers in weight that may be skewing the means. A majority of the weight observations are within the range of 0 to 20 grams, but there are values for each channel type that are above 50 grams. Because of this data skew, it may not be the best to compare the sample means across channel types. Instead, it would be better to use either a non-parametric comparison test or a test that compares median weights. 
 
+### **Summary**
 
-#### **References**
+The results from the statistical analysis of Pacific salamander abundances and weights in Mack Creek, Oregon are as follows:
+
+- The abundances of Pacific salamanders have showed similar trends between old growth and clear cut forest sections from 1993 to 2017.
+- There is not a significant association between forest condition (old growth or clear cut) and the channel type (cascade, pool, and side-channel) in which salamanders are more abundant. Proportions of salamander counts in each channel type are similar in clear cut and old growth forest sections.
+- In addition, there is no significant difference between means of salamander weight in clear cut and old growth forest sections. 
+- Between the three channel types, at least two of the mean salamander weights are not equal. Additional testing is required to determine which of the two are different. Mean data may be skewed by outliers, so it is recommended that future testing compare median values of salamander weight.
+
+### **References**
 
 [1] Gregory S. V. 2016. Aquatic Vertebrate Population Study in Mack Creek, Andrews Experimental Forest, 1987 to present. Environmental Data Initiative. https://doi.org/10.6073/pasta/5de64af9c11579266ef20da2ff32f702. Dataset accessed 11/29/2019.
  
