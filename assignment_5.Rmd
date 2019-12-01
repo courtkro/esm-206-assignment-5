@@ -261,4 +261,4 @@ The results from the statistical analysis of Pacific salamander abundances and w
  
 [2] “Pacific Giant Salamander: Oregon Wild.” Pacific Giant Salamander | Oregon Wild, https://oregonwild.org/wildlife/pacific-giant-salamander.
 
-[3] Parker, Michael S. “Feeding Ecology of Stream-Dwelling Pacific Giant Salamander Larvae (Dicamptodon Tenebrosus).” Copeia, vol. 1994, no. 3, 1994, pp. 705–718. JSTOR, www.jstor.org/stable/1447187.
+[3] Parker, Michael S. “Feeding Ecology of Stream-Dwelling Pacific Giant Salamander Larvae (Dicamptodon Tenebrosus).” Copeia, vol. 1994, no. 3, 1994, pp. 705–718. JSTOR, https://www.jstor.org/stable/1447187?seq=1#metadata_info_tab_contents. 
